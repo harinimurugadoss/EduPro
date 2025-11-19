@@ -1,0 +1,85 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block page_title %}Student Dashboard{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link active" href="{% url 'student_dashboard' %}">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'courses' %}">
+            <i class="bi bi-book"></i> Browse Courses
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'profile' %}">
+            <i class="bi bi-person"></i> Profile
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Welcome, {{ user.get_full_name|default:user.username }}!</h5>
+                <p class="card-text">Track your learning progress and continue your courses.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% for item in course_progress %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            {% if item.course.thumbnail %}
+            <img src="{{ item.course.thumbnail.url }}" class="card-img-top" alt="{{ item.course.title }}" style="height: 200px; object-fit: cover;">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ item.course.title }}</h5>
+                <p class="card-text text-muted small">{{ item.course.instructor.get_full_name|default:item.course.instructor.username }}</p>
+                
+                <!-- Progress Bar -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="small">Progress</span>
+                        <span class="small"><strong>{{ item.completed_videos }}/{{ item.total_videos }}</strong> videos</span>
+                    </div>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar {% if item.progress == 100 %}bg-success{% elif item.progress >= 50 %}bg-info{% else %}bg-warning{% endif %}" 
+                             role="progressbar" 
+                             style="width: {{ item.progress }}%"
+                             aria-valuenow="{{ item.progress }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                            {{ item.progress|floatformat:0 }}%
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="{% url 'student_course_detail' item.course.id %}" class="btn btn-primary btn-sm">
+                    <i class="bi bi-play-circle"></i> Continue Learning
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> You haven't enrolled in any courses yet. 
+            <a href="{% url 'courses' %}">Browse courses</a> to get started!
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

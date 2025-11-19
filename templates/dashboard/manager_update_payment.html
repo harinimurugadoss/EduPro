@@ -1,0 +1,109 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Update Payment{% endblock %}
+
+{% block page_title %}Update Payment Details{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'manager_dashboard' %}">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'manager_view_payments' %}">
+            <i class="bi bi-credit-card"></i> View Payments
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-pencil"></i> Update Payment</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>Student:</strong> {{ payment.student.get_full_name|default:payment.student.username }}<br>
+                    <strong>Course:</strong> {{ payment.course.title }}<br>
+                    <strong>Amount:</strong> ${{ payment.amount|floatformat:2 }}
+                </div>
+                
+                <hr>
+                
+                <div class="mb-3">
+                    <strong>Current Status:</strong> 
+                    <span class="badge 
+                        {% if payment.status == 'approved' %}bg-success
+                        {% elif payment.status == 'requested' %}bg-warning
+                        {% elif payment.status == 'rejected' %}bg-danger
+                        {% else %}bg-secondary{% endif %}">
+                        {{ payment.get_status_display }}
+                    </span>
+                </div>
+                
+                {% if payment.status == 'requested' %}
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Action</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="action" id="approve" value="approve" checked>
+                            <label class="btn btn-outline-success" for="approve">
+                                <i class="bi bi-check-circle"></i> Approve
+                            </label>
+                            
+                            <input type="radio" class="btn-check" name="action" id="reject" value="reject">
+                            <label class="btn btn-outline-danger" for="reject">
+                                <i class="bi bi-x-circle"></i> Reject
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Notes</label>
+                        <textarea name="notes" class="form-control" rows="3" placeholder="Add notes about your decision (optional)">{{ payment.notes|default:'' }}</textarea>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> <strong>Note:</strong> If you approve this payment, the student will be automatically enrolled in the course.
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Submit Decision
+                        </button>
+                        <a href="{% url 'manager_view_payments' %}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+                {% else %}
+                <div class="mb-3">
+                    <strong>Payment Method:</strong> {{ payment.get_payment_method_display }}<br>
+                    <strong>Transaction ID:</strong> {{ payment.transaction_id|default:"N/A" }}<br>
+                    {% if payment.approved_by %}
+                    <strong>Approved By:</strong> {{ payment.approved_by.username }}<br>
+                    <strong>Approved At:</strong> {{ payment.approved_at|date:"M d, Y H:i" }}<br>
+                    {% endif %}
+                    {% if payment.notes %}
+                    <strong>Notes:</strong><br>
+                    <p class="text-muted">{{ payment.notes }}</p>
+                    {% endif %}
+                </div>
+                <a href="{% url 'manager_view_payments' %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Payments
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

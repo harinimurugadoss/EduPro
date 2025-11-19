@@ -1,0 +1,70 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Delete Contact Information{% endblock %}
+
+{% block page_title %}Delete Contact Information{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'trainer_dashboard' %}">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Delete Contact Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i> <strong>Warning:</strong> Are you sure you want to delete your contact information? This action cannot be undone.
+                </div>
+                
+                <div class="mb-3">
+                    <strong>Current Contact Information:</strong>
+                    <ul class="mt-2">
+                        {% if contact_info.whatsapp %}
+                        <li>WhatsApp: {{ contact_info.whatsapp }}</li>
+                        {% endif %}
+                        {% if contact_info.microsoft_teams %}
+                        <li>Microsoft Teams: {{ contact_info.microsoft_teams }}</li>
+                        {% endif %}
+                        {% if contact_info.skype %}
+                        <li>Skype: {{ contact_info.skype }}</li>
+                        {% endif %}
+                        {% if contact_info.email %}
+                        <li>Email: {{ contact_info.email }}</li>
+                        {% endif %}
+                        {% if contact_info.phone %}
+                        <li>Phone: {{ contact_info.phone }}</li>
+                        {% endif %}
+                        {% if not contact_info.whatsapp and not contact_info.microsoft_teams and not contact_info.skype and not contact_info.email and not contact_info.phone %}
+                        <li class="text-muted">No contact information available</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Yes, Delete Contact Information
+                        </button>
+                        <a href="{% url 'trainer_dashboard' %}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

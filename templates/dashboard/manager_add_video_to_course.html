@@ -1,0 +1,64 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Add Video - {{ course.title }}{% endblock %}
+
+{% block page_title %}Add Video to {{ course.title }}{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'manager_dashboard' %}">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'manager_manage_course_videos' course.id %}">
+            <i class="bi bi-arrow-left"></i> Back to Videos
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Add Video to Course</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>Course:</strong> {{ course.title }}
+                </div>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Video Title *</label>
+                        <input type="text" name="title" class="form-control" required placeholder="Enter video title">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Video File *</label>
+                        <input type="file" name="video" class="form-control" accept="video/*" required>
+                        <small class="form-text text-muted">Supported formats: MP4, WebM, etc.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Order</label>
+                        <input type="number" name="order" class="form-control" value="0" min="0">
+                        <small class="form-text text-muted">Lower numbers appear first. Videos are sorted by order, then by creation date.</small>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-upload"></i> Add Video
+                        </button>
+                        <a href="{% url 'manager_manage_course_videos' course.id %}" class="btn btn-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,83 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Payment - {{ course.title }}{% endblock %}
+
+{% block page_title %}Complete Payment{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'student_dashboard' %}">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-credit-card"></i> Course Payment</h5>
+            </div>
+            <div class="card-body">
+                <h5>{{ course.title }}</h5>
+                <p class="text-muted">{{ course.description|truncatewords:30 }}</p>
+                
+                <hr>
+                
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Course Price:</span>
+                    <strong>${{ course.price|floatformat:2 }}</strong>
+                </div>
+                
+                {% if course.discount > 0 %}
+                <div class="d-flex justify-content-between mb-3 text-success">
+                    <span>Discount ({{ course.discount }}%):</span>
+                    <strong>-${{ course.discount|floatformat:2 }}</strong>
+                </div>
+                {% endif %}
+                
+                <hr>
+                
+                <div class="d-flex justify-content-between mb-4">
+                    <h5>Total:</h5>
+                    <h5 class="text-primary">${{ course.price|floatformat:2 }}</h5>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Payment Method</label>
+                        <select name="payment_method" class="form-select" required>
+                            <option value="card">Credit/Debit Card</option>
+                            <option value="upi">UPI</option>
+                            <option value="netbanking">Net Banking</option>
+                            <option value="wallet">Wallet</option>
+                            <option value="cash">Cash</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Transaction ID (Optional)</label>
+                        <input type="text" name="transaction_id" class="form-control" placeholder="Enter transaction ID if available">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Additional Notes (Optional)</label>
+                        <textarea name="notes" class="form-control" rows="3" placeholder="Add any additional information about your payment"></textarea>
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="bi bi-info-circle"></i> <strong>Payment Request System:</strong> After submitting, your request will be sent to the manager for approval. You will be enrolled in the course once the manager approves your payment request.
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="bi bi-send"></i> Submit Payment Request
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

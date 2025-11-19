@@ -1,0 +1,61 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Upload Video - {{ course.title }}{% endblock %}
+
+{% block page_title %}Upload Video to {{ course.title }}{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'trainer_dashboard' %}">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'trainer_course_students' course.id %}">
+            <i class="bi bi-arrow-left"></i> Back to Course
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-upload"></i> Upload Video</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Video Title *</label>
+                        <input type="text" name="title" class="form-control" required placeholder="Enter video title">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Video File *</label>
+                        <input type="file" name="video" class="form-control" accept="video/*" required>
+                        <small class="form-text text-muted">Supported formats: MP4, WebM, etc.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Order</label>
+                        <input type="number" name="order" class="form-control" value="0" min="0">
+                        <small class="form-text text-muted">Lower numbers appear first</small>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-upload"></i> Upload Video
+                        </button>
+                        <a href="{% url 'trainer_course_students' course.id %}" class="btn btn-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

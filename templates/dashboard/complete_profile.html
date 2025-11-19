@@ -1,0 +1,101 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Complete Profile{% endblock %}
+
+{% block page_title %}Complete Your Profile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-person-circle"></i> Add Location Information</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" id="locationForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Country *</label>
+                        <select name="country" id="country" class="form-select" required>
+                            <option value="">Select Country</option>
+                            {% for country in countries %}
+                            <option value="{{ country.id }}" {% if profile.country == country.name %}selected{% endif %}>
+                                {{ country.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">State *</label>
+                        <select name="state" id="state" class="form-select" required>
+                            <option value="">Select State</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">District *</label>
+                        <select name="district" id="district" class="form-select" required>
+                            <option value="">Select District</option>
+                        </select>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Save Profile
+                        </button>
+                        <a href="{% url 'student_dashboard' %}" class="btn btn-secondary">Skip for Now</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    // Load states when country is selected
+    $('#country').on('change', function() {
+        var countryId = $(this).val();
+        $('#state').html('<option value="">Loading...</option>');
+        $('#district').html('<option value="">Select District</option>');
+        
+        if (countryId) {
+            $.ajax({
+                url: '/ajax/states/' + countryId + '/',
+                type: 'GET',
+                success: function(data) {
+                    $('#state').html('<option value="">Select State</option>');
+                    $.each(data, function(key, value) {
+                        $('#state').append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                }
+            });
+        }
+    });
+    
+    // Load districts when state is selected
+    $('#state').on('change', function() {
+        var stateId = $(this).val();
+        $('#district').html('<option value="">Loading...</option>');
+        
+        if (stateId) {
+            $.ajax({
+                url: '/ajax/districts/' + stateId + '/',
+                type: 'GET',
+                success: function(data) {
+                    $('#district').html('<option value="">Select District</option>');
+                    $.each(data, function(key, value) {
+                        $('#district').append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                }
+            });
+        }
+    });
+    
+    // Trigger state load if country is pre-selected
+    if ($('#country').val()) {
+        $('#country').trigger('change');
+    }
+});
+</script>
+{% endblock %}
+

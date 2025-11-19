@@ -1,0 +1,64 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Rate Video{% endblock %}
+
+{% block page_title %}Rate {{ video.title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Rate Video</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Course: {{ video.course.title }}</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Rating</label>
+                        <div class="rating-input">
+                            {% for i in "12345" %}
+                            <input type="radio" name="rating" value="{{ i }}" id="star{{ i }}" 
+                                   {% if existing_rating and existing_rating.rating == i|add:"0" %}checked{% endif %}>
+                            <label for="star{{ i }}" class="star-label">
+                                <i class="bi bi-star{% if existing_rating and existing_rating.rating >= i|add:"0" %}-fill{% endif %}"></i>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Comment (Optional)</label>
+                        <textarea name="comment" class="form-control" rows="4" placeholder="Share your thoughts...">{{ existing_rating.comment|default:"" }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Rating</button>
+                    <a href="{% url 'student_course_detail' video.course.id %}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.rating-input {
+    display: flex;
+    gap: 5px;
+    font-size: 2rem;
+}
+.rating-input input[type="radio"] {
+    display: none;
+}
+.rating-input .star-label {
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.2s;
+}
+.rating-input input[type="radio"]:checked ~ .star-label,
+.rating-input .star-label:hover,
+.rating-input input[type="radio"]:checked ~ .star-label ~ .star-label {
+    color: #ffc107;
+}
+</style>
+{% endblock %}
+

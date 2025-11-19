@@ -1,0 +1,117 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Assign Trainer{% endblock %}
+
+{% block page_title %}Assign Trainer to Course{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'manager_dashboard' %}">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<!-- Assign New Trainer -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-link-45deg"></i> Assign Trainer to Course</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label class="form-label">Select Trainer *</label>
+                            <select name="trainer" class="form-select" required>
+                                <option value="">Choose a trainer...</option>
+                                {% for trainer in trainers %}
+                                <option value="{{ trainer.id }}">{{ trainer.get_full_name|default:trainer.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label class="form-label">Select Course *</label>
+                            <select name="course" class="form-select" required>
+                                <option value="">Choose a course...</option>
+                                {% for course in courses %}
+                                <option value="{{ course.id }}">{{ course.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2 mb-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-check-circle"></i> Assign
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- All Assignments -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-list-check"></i> All Trainer Assignments ({{ assignments.count }})</h5>
+            </div>
+            <div class="card-body">
+                {% if assignments %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Trainer</th>
+                                <th>Course</th>
+                                <th>Category</th>
+                                <th>Assigned By</th>
+                                <th>Assigned Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for assignment in assignments %}
+                            <tr>
+                                <td>
+                                    <strong>{{ assignment.trainer.get_full_name|default:assignment.trainer.username }}</strong>
+                                    <br><small class="text-muted">{{ assignment.trainer.email }}</small>
+                                </td>
+                                <td><strong>{{ assignment.course.title }}</strong></td>
+                                <td><span class="badge bg-secondary">{{ assignment.course.category }}</span></td>
+                                <td>{{ assignment.assigned_by.get_full_name|default:assignment.assigned_by.username }}</td>
+                                <td>{{ assignment.assigned_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="{% url 'manager_manage_trainer_assignments' assignment.trainer.id %}" class="btn btn-sm btn-outline-info">
+                                            <i class="bi bi-eye"></i> View
+                                        </a>
+                                        <a href="{% url 'manager_unassign_trainer' assignment.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to unassign {{ assignment.trainer.username }} from {{ assignment.course.title }}?');">
+                                            <i class="bi bi-x-circle"></i> Unassign
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> No trainer assignments found. Assign a trainer to a course above.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

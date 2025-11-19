@@ -1,0 +1,370 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <title>{% block title %}{% endblock title %} - EduPro</title>
+  </head>
+  <body>
+    <!-- Navbar -->
+
+    <header>
+      <nav class="container">
+        <span>
+          <a href="/">
+            <div
+              style="
+                display: flex;
+                justify-content: baseline;
+                column-gap: 0.3rem;
+                align-items: center;
+              "
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M11.6116 3.30203C11.8551 3.23273 12.1119 3.23267 12.3553 3.30176C12.8729 3.44863 13.3952 3.58485 13.9192 3.72153C16.38 4.36334 18.8793 5.01516 21.1028 6.82618L22.1267 7.66016C22.542 7.99845 22.7498 8.49918 22.75 9V16C22.75 16.4142 22.4142 16.75 22 16.75C21.5858 16.75 21.25 16.4142 21.25 16V11.0567L21.0871 11.1896C20.3166 11.8183 19.5128 12.3066 18.6888 12.7029C18.7282 12.794 18.75 12.8944 18.75 13V17.2939C18.75 18.4272 18.0548 19.4444 16.9989 19.8561L12.9989 21.4156C12.3565 21.666 11.6435 21.666 11.0011 21.4156L7.0011 19.8561C5.94522 19.4444 5.25 18.4272 5.25 17.2939V13C5.25 12.8918 5.27292 12.7889 5.31418 12.696C4.48383 12.2973 3.67373 11.8063 2.89724 11.1738L1.8733 10.3398C1.04264 9.66327 1.04221 8.33693 1.87215 7.65967L2.91292 6.81037C5.12037 5.00904 7.60193 4.36111 10.0445 3.72335C10.5697 3.58623 11.0931 3.44957 11.6116 3.30203ZM21.25 9.0006C21.25 8.91051 21.2136 8.85102 21.1794 8.8232L20.1555 7.98922C18 6.5 16.0794 5.84319 13.6399 5.20216C13.1035 5.06121 12.5519 4.91626 11.984 4.75559C11.4135 4.91742 10.8599 5.06306 10.3217 5.20465C7.9018 5.84128 5.79323 6.39601 3.86128 7.97253L2.8205 8.82184C2.78631 8.84973 2.74996 8.90931 2.75 8.9994C2.75004 9.08949 2.78643 9.14898 2.82058 9.1768L3.84453 10.0108C5.79285 11.5977 7.92065 12.1568 10.3601 12.7978C10.8965 12.9388 11.4481 13.0837 12.016 13.2444C12.5865 13.0826 13.14 12.937 13.6782 12.7954C16.0981 12.1587 18.2068 11.604 20.1387 10.0275L21.1795 9.17816C21.2137 9.15029 21.25 9.09054 21.25 9.0006Z"
+                  fill="white"
+                />
+              </svg>
+              <span style="color: #ffffff">EduPro</span>
+            </div>
+          </a>
+        </span>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li>
+            <a
+              style="display: flex"
+              class="desktop-categories-btn"
+              href="javascript:void(0);"
+            >
+              Categories
+            </a>
+          </li>
+          <li>
+            {% if user.is_authenticated %}
+            <a class="btn" href="/dashboard/home">Dashboard</a>&nbsp {% else %}
+            <a class="btn" href="/accounts/signup/">Signup</a>&nbsp {% endif %}
+            {% if user.is_authenticated %}
+            <a class="btn" href="/accounts/logout/">Logout</a>
+            {% else %}
+            <a class="btn" href="/accounts/login/">Login</a>&nbsp {% endif %}
+          </li>
+        </ul>
+        <div class="mob-icons">
+          <svg
+            class="menubtn"
+            style="cursor: pointer"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M12 5.25003C12.4142 5.25003 12.75 5.58582 12.75 6.00003C12.75 6.41424 12.4142 6.75003 12 6.75003C11.5858 6.75003 11.25 6.41424 11.25 6.00003C11.25 5.58582 11.5858 5.25003 12 5.25003Z"
+              fill="black"
+            />
+          </svg>
+          <svg
+            class="menuClosebtn"
+            style="cursor: pointer"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M8.46447 15.5355L15.5355 8.46446"
+              stroke="black"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Desktop Categories -->
+    <div class="desktop-categories">
+      <ul>
+        <div>
+          <div
+            style="
+              border-bottom: 2px solid #f8f8ff;
+              border-top: 2px solid #f8f8ff;
+            "
+          >
+            <a href="#"><li>Development</li></a>
+          </div>
+          <a href="#"><li>Web Development</li></a>
+          <a href="#"><li>Game Development</li></a>
+          <a href="#"><li>Software Development</li></a>
+        </div>
+        <div>
+          <div
+            style="
+              border-top: 2px solid #f8f8ff;
+              border-bottom: 2px solid #f8f8ff;
+            "
+          >
+            <a href="#"><li>Design</li></a>
+          </div>
+          <a href="#"><li>Web Design</li></a>
+          <a href="#"><li>Graphic Design</li></a>
+          <a href="#"><li>Game Design</li></a>
+          <a href="#"><li>Illustration</li></a>
+          <a href="#"><li>Animation</li></a>
+        </div>
+        <div>
+          <div
+            style="
+              border-top: 2px solid #f8f8ff;
+              border-bottom: 2px solid #f8f8ff;
+            "
+          >
+            <a href="#"><li>Marketing</li></a>
+          </div>
+          <a href="#"><li>Digital Marketing</li></a>
+          <a href="#"><li>Content Marketing</li></a>
+          <a href="#"><li>Affiliate Marketing</li></a>
+          <a href="#"><li>Product Marketing</li></a>
+        </div>
+      </ul>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mob-menu">
+      <ul>
+        <a href="/"><li>Home</li></a>
+
+        <a href="/about"><li>About</li></a>
+        <a href="/contact"><li>Contact</li></a>
+
+        <a href="javascript:void(0);">
+          <li
+            style="
+              display: flex;
+              justify-content: baseline;
+              border-bottom: 2px solid #f8f8ff;
+            "
+          >
+            <span>Categories</span>
+            <svg class="categories-btn" width="24" height="24" fill="none">
+              <path
+                d="M16.5303 8.96967C16.8232 9.26256 16.8232 9.73744 16.5303 10.0303L12.5303 14.0303C12.2374 14.3232 11.7626 14.3232 11.4697 14.0303L7.46967 10.0303C7.17678 9.73744 7.17678 9.26256 7.46967 8.96967C7.76256 8.67678 8.23744 8.67678 8.53033 8.96967L12 12.4393L15.4697 8.96967C15.7626 8.67678 16.2374 8.67678 16.5303 8.96967Z"
+                fill="black"
+              />
+            </svg>
+            <svg
+              class="categories-close-btn"
+              width="24"
+              height="24"
+              fill="none"
+            >
+              <path
+                d="M16.5303 14.0303C16.2374 14.3232 15.7626 14.3232 15.4697 14.0303L12 10.5607L8.53033 14.0303C8.23744 14.3232 7.76256 14.3232 7.46967 14.0303C7.17678 13.7374 7.17678 13.2626 7.46967 12.9697L11.4697 8.96967C11.7626 8.67678 12.2374 8.67678 12.5303 8.96967L16.5303 12.9697C16.8232 13.2626 16.8232 13.7374 16.5303 14.0303Z"
+                fill="black"
+              />
+            </svg>
+          </li>
+        </a>
+
+        <div style="border-bottom: 2px solid #f8f8ff" class="mob-categories">
+          <a href="#"><li>Development</li></a>
+          <a href="#"><li>Business</li></a>
+          <a href="#"><li>Finance</li></a>
+          <a href="#"><li>Design</li></a>
+          <a href="#"><li>Marketing</li></a>
+          <a href="#"><li>Lifestyle</li></a>
+        </div>
+
+        <div class="mob-menu-signup">
+          {% if user.is_authenticated %}
+          <a href="/dashboard/home/"
+            ><li
+              style="
+                text-align: center;
+                margin: 0.4rem 0.5rem;
+                padding: 0.2rem 0;
+                background-color: #8710d8;
+                color: #fff;
+                border-radius: 4px;
+              "
+            >
+              Dashboard
+            </li></a
+          >
+          {% else %}
+          <a href="/accounts/signup"
+            ><li
+              style="
+                text-align: center;
+                margin: 0.4rem 0.5rem;
+                padding: 0.2rem 0;
+                background-color: #8710d8;
+                color: #fff;
+                border-radius: 4px;
+              "
+            >
+              Signup
+            </li></a
+          >
+          {% endif %} {% if user.is_authenticated %}
+          <a href="/accounts/logout"
+            ><li
+              style="
+                text-align: center;
+                margin: 0.4rem 0.5rem;
+                padding: 0.2rem 0;
+                background-color: #8710d8;
+                color: #fff;
+                border-radius: 4px;
+              "
+            >
+              Logout
+            </li></a
+          >
+          {% else %}
+          <a href="/accounts/login"
+            ><li
+              style="
+                text-align: center;
+                margin: 0.4rem 0.5rem;
+                padding: 0.2rem 0;
+                background-color: #8710d8;
+                color: #fff;
+                border-radius: 4px;
+              "
+            >
+              Login
+            </li></a
+          >
+          {% endif %}
+        </div>
+      </ul>
+    </div>
+
+    <!-- Main content -->
+    <main>{% block content %}{% endblock content %}</main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-container container">
+        <div>
+          <span>
+            <a href="/">
+              <div
+                style="
+                  display: flex;
+                  justify-content: baseline;
+                  column-gap: 0.3rem;
+                "
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M11.6116 3.30203C11.8551 3.23273 12.1119 3.23267 12.3553 3.30176C12.8729 3.44863 13.3952 3.58485 13.9192 3.72153C16.38 4.36334 18.8793 5.01516 21.1028 6.82618L22.1267 7.66016C22.542 7.99845 22.7498 8.49918 22.75 9V16C22.75 16.4142 22.4142 16.75 22 16.75C21.5858 16.75 21.25 16.4142 21.25 16V11.0567L21.0871 11.1896C20.3166 11.8183 19.5128 12.3066 18.6888 12.7029C18.7282 12.794 18.75 12.8944 18.75 13V17.2939C18.75 18.4272 18.0548 19.4444 16.9989 19.8561L12.9989 21.4156C12.3565 21.666 11.6435 21.666 11.0011 21.4156L7.0011 19.8561C5.94522 19.4444 5.25 18.4272 5.25 17.2939V13C5.25 12.8918 5.27292 12.7889 5.31418 12.696Z"
+                    fill="black"
+                  />
+                </svg>
+                <span>EduPro</span>
+              </div>
+            </a>
+          </span>
+          <div style="margin-top: 1rem" class="EduPro-foot-about">
+            <p>
+              Transform the way you learn with EduPro, featuring advanced tools
+              and resources to help you achieve your goals and maximize your
+              potential.
+            </p>
+          </div>
+          <div class="foot-socials">
+            <a href="#"
+              ><svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M10.3859 8.35688C10.1542 8.21786 9.86561 8.21422 9.63048 8.34735C9.39534 8.48048 9.25 8.7298 9.25 9V15C9.25 15.2702 9.39534 15.5195 9.63048 15.6526C9.86561 15.7858 10.1542 15.7821 10.3859 15.6431L15.3859 12.6431C15.6118 12.5076 15.75 12.2634 15.75 12C15.75 11.7366 15.6118 11.4924 15.3859 11.3569L10.3859 8.35688ZM13.5423 12L10.75 13.6754V10.3246L13.5423 12Z"
+                  fill="black"
+                /></svg
+            ></a>
+            <a href="#"
+              ><svg width="24" height="24" fill="none"><path /></svg
+            ></a>
+            <a href="#"
+              ><svg width="24" height="24" fill="none"><path /></svg
+            ></a>
+          </div>
+        </div>
+
+        <div>
+          <span>Company</span>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/contact">Blog</a></li>
+            <li><a href="/contact">Privacy</a></li>
+            <li><a href="/contact">Affiliates</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <span>Courses</span>
+          <ul>
+            <li><a href="/about">Web Development</a></li>
+            <li><a href="/">Animation</a></li>
+            <li><a href="/contact">Graphic Design</a></li>
+            <li><a href="/contact">Marketing</a></li>
+            <li><a href="/contact">Data Science</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <span>Application</span>
+          <ul>
+            <li>
+              <a href="#">
+                <button style="font-weight: 600">Download Android App</button>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <button style="padding: 0.5rem 2rem; font-weight: 600">
+                  Download iOS App
+                </button>
+              </a>
+            </li>
+          </ul>
+          <div style="margin-top: 1rem" class="foot-credits">
+            <p>
+              Copyright &copy;
+              <script>
+                document.write(new Date().getFullYear());
+              </script>
+              <a style="font-weight: 600" href="/">EduPro</a> All Rights
+              Reserved
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>

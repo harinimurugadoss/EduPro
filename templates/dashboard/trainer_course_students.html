@@ -1,0 +1,85 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Student Progress - {{ course.title }}{% endblock %}
+
+{% block page_title %}Student Progress: {{ course.title }}{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'trainer_dashboard' %}">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5>{{ course.title }}</h5>
+                <p class="text-muted">{{ course.description|truncatewords:30 }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-people"></i> Student Progress</h5>
+            </div>
+            <div class="card-body">
+                {% if student_progress %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Email</th>
+                                <th>Progress</th>
+                                <th>Videos Completed</th>
+                                <th>Avg Time per Video</th>
+                                <th>Enrolled Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in student_progress %}
+                            <tr>
+                                <td>{{ item.student.get_full_name|default:item.student.username }}</td>
+                                <td>{{ item.student.email }}</td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar {% if item.progress == 100 %}bg-success{% elif item.progress >= 50 %}bg-info{% else %}bg-warning{% endif %}" 
+                                             role="progressbar" 
+                                             style="width: {{ item.progress }}%"
+                                             aria-valuenow="{{ item.progress }}" 
+                                             aria-valuemin="0" 
+                                             aria-valuemax="100">
+                                            {{ item.progress|floatformat:0 }}%
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ item.completed_videos }} / {{ item.total_videos }}</td>
+                                <td><strong>{{ item.avg_time_per_video }}</strong></td>
+                                <td>{{ item.enrollment.enrolled_at|date:"M d, Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> No students enrolled in this course yet.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

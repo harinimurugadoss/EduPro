@@ -1,0 +1,88 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Contact Trainer{% endblock %}
+
+{% block page_title %}Contact {{ trainer.get_full_name|default:trainer.username }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-person-circle"></i> Trainer Information</h5>
+            </div>
+            <div class="card-body">
+                <h4>{{ trainer.get_full_name|default:trainer.username }}</h4>
+                <p class="text-muted">{{ trainer.email }}</p>
+                
+                {% if avg_rating > 0 %}
+                <div class="mb-3">
+                    <span class="badge bg-warning text-dark">
+                        <i class="bi bi-star-fill"></i> {{ avg_rating|floatformat:1 }} / 5.0
+                    </span>
+                </div>
+                {% endif %}
+                
+                <hr>
+                
+                <h6>Contact Information</h6>
+                <div class="contact-links">
+                    {% if contact_info.whatsapp %}
+                    <a href="{{ contact_info.whatsapp }}" target="_blank" class="btn btn-success mb-2">
+                        <i class="bi bi-whatsapp"></i> WhatsApp
+                    </a>
+                    {% endif %}
+                    
+                    {% if contact_info.microsoft_teams %}
+                    <a href="{{ contact_info.microsoft_teams }}" target="_blank" class="btn btn-primary mb-2">
+                        <i class="bi bi-microsoft"></i> Microsoft Teams
+                    </a>
+                    {% endif %}
+                    
+                    {% if contact_info.skype %}
+                    <a href="{{ contact_info.skype }}" target="_blank" class="btn btn-info mb-2">
+                        <i class="bi bi-skype"></i> Skype
+                    </a>
+                    {% endif %}
+                    
+                    {% if contact_info.email %}
+                    <a href="mailto:{{ contact_info.email }}" class="btn btn-primary mb-2">
+                        <i class="bi bi-envelope"></i> Email
+                    </a>
+                    {% endif %}
+                    
+                    {% if contact_info.phone %}
+                    <a href="tel:{{ contact_info.phone }}" class="btn btn-secondary mb-2">
+                        <i class="bi bi-telephone"></i> {{ contact_info.phone }}
+                    </a>
+                    {% endif %}
+                </div>
+                
+                {% if not contact_info.whatsapp and not contact_info.microsoft_teams and not contact_info.skype and not contact_info.email and not contact_info.phone %}
+                <div class="alert alert-info">
+                    Contact information not available yet.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Actions</h6>
+            </div>
+            <div class="card-body">
+                <a href="{% url 'rate_trainer' trainer.id %}" class="btn btn-warning w-100 mb-2">
+                    <i class="bi bi-star"></i> Rate Trainer
+                </a>
+                <a href="{% url 'student_dashboard' %}" class="btn btn-secondary w-100">
+                    <i class="bi bi-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

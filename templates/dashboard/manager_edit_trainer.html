@@ -1,0 +1,81 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Edit Trainer - {{ trainer.username }}{% endblock %}
+
+{% block page_title %}Edit Trainer: {{ trainer.get_full_name|default:trainer.username }}{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'manager_dashboard' %}">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-pencil"></i> Edit Trainer</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-control" value="{{ trainer.username }}" disabled>
+                        <small class="form-text text-muted">Username cannot be changed</small>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">First Name</label>
+                            <input type="text" name="first_name" class="form-control" value="{{ trainer.first_name }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" name="last_name" class="form-control" value="{{ trainer.last_name }}">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email *</label>
+                        <input type="email" name="email" class="form-control" value="{{ trainer.email }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">New Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="Leave empty to keep current password">
+                        <small class="form-text text-muted">Only fill this if you want to change the password</small>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Country</label>
+                            <input type="text" name="country" class="form-control" value="{{ profile.country|default:'' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">State</label>
+                            <input type="text" name="state" class="form-control" value="{{ profile.state|default:'' }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">District</label>
+                            <input type="text" name="district" class="form-control" value="{{ profile.district|default:'' }}">
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Update Trainer
+                        </button>
+                        <a href="{% url 'manager_edit_trainer_contact' trainer.id %}" class="btn btn-outline-primary">
+                            <i class="bi bi-person-lines-fill"></i> Edit Contact Information
+                        </a>
+                        <a href="{% url 'manager_dashboard' %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

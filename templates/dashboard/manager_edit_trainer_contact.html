@@ -1,0 +1,87 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Edit Trainer Contact - {{ trainer.username }}{% endblock %}
+
+{% block page_title %}Edit Contact Information: {{ trainer.get_full_name|default:trainer.username }}{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'manager_dashboard' %}">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-pencil"></i> Edit Contact Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>Trainer:</strong> {{ trainer.get_full_name|default:trainer.username }}<br>
+                    <strong>Email:</strong> {{ trainer.email }}
+                </div>
+                
+                <hr>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">WhatsApp Link</label>
+                        <input type="url" name="whatsapp" class="form-control" value="{{ contact_info.whatsapp|default:'' }}" placeholder="https://wa.me/1234567890">
+                        <small class="form-text text-muted">Enter WhatsApp contact link (e.g., https://wa.me/1234567890)</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Microsoft Teams Link</label>
+                        <input type="url" name="microsoft_teams" class="form-control" value="{{ contact_info.microsoft_teams|default:'' }}" placeholder="https://teams.microsoft.com/l/chat/0/0?users=...">
+                        <small class="form-text text-muted">Enter Microsoft Teams contact link</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Skype Link</label>
+                        <input type="url" name="skype" class="form-control" value="{{ contact_info.skype|default:'' }}" placeholder="https://join.skype.com/invite/...">
+                        <small class="form-text text-muted">Enter Skype contact link</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" value="{{ contact_info.email|default:'' }}" placeholder="trainer@example.com">
+                        <small class="form-text text-muted">Contact email address</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="text" name="phone" class="form-control" value="{{ contact_info.phone|default:'' }}" placeholder="+1234567890">
+                        <small class="form-text text-muted">Phone number for contact</small>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> All fields are optional. Students will be able to see the contact information provided.
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Update Contact Information
+                        </button>
+                        <a href="{% url 'manager_delete_trainer_contact' trainer.id %}" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Delete Contact
+                        </a>
+                        <a href="{% url 'manager_dashboard' %}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

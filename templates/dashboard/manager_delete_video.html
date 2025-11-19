@@ -1,0 +1,59 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Delete Video - {{ video.title }}{% endblock %}
+
+{% block page_title %}Delete Video{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'manager_manage_course_videos' video.course.id %}">
+            <i class="bi bi-arrow-left"></i> Back to Videos
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Delete Video</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i> <strong>Warning!</strong> This action cannot be undone.
+                </div>
+                
+                <p>Are you sure you want to delete this video?</p>
+                
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6><strong>{{ video.title }}</strong></h6>
+                        <p class="text-muted mb-0">
+                            <strong>Course:</strong> {{ video.course.title }}<br>
+                            <strong>Order:</strong> {{ video.order }}<br>
+                            <strong>Created:</strong> {{ video.created_at|date:"M d, Y" }}
+                        </p>
+                    </div>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Yes, Delete Video
+                        </button>
+                        <a href="{% url 'manager_manage_course_videos' video.course.id %}" class="btn btn-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

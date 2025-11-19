@@ -1,0 +1,77 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Delete Trainer - {{ trainer.username }}{% endblock %}
+
+{% block page_title %}Delete Trainer{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'manager_dashboard' %}">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Delete Trainer</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle"></i> <strong>Warning!</strong> This action cannot be undone.
+                    <br>This will delete the trainer and all associated:
+                    <ul class="mb-0 mt-2">
+                        <li>Course assignments</li>
+                        <li>Trainer ratings</li>
+                        <li>Contact information</li>
+                    </ul>
+                </div>
+                
+                <p>Are you sure you want to delete this trainer?</p>
+                
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6><strong>{{ trainer.get_full_name|default:trainer.username }}</strong></h6>
+                        <p class="text-muted mb-0">
+                            <strong>Username:</strong> {{ trainer.username }}<br>
+                            <strong>Email:</strong> {{ trainer.email }}<br>
+                            <strong>Assigned Courses:</strong> {{ assigned_courses.count }}<br>
+                            <strong>Joined:</strong> {{ trainer.date_joined|date:"M d, Y" }}
+                        </p>
+                    </div>
+                </div>
+                
+                {% if assigned_courses.count > 0 %}
+                <div class="alert alert-info">
+                    <strong>Assigned Courses:</strong>
+                    <ul class="mb-0 mt-2">
+                        {% for assignment in assigned_courses %}
+                        <li>{{ assignment.course.title }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Yes, Delete Trainer
+                        </button>
+                        <a href="{% url 'manager_dashboard' %}" class="btn btn-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

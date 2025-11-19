@@ -1,0 +1,55 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Unassign Trainer{% endblock %}
+
+{% block page_title %}Unassign Trainer{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'manager_assign_trainer' %}">
+            <i class="bi bi-arrow-left"></i> Back to Assignments
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-warning">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Unassign Trainer</h5>
+            </div>
+            <div class="card-body">
+                <p>Are you sure you want to unassign this trainer from the course?</p>
+                
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6><strong>Trainer:</strong> {{ assignment.trainer.get_full_name|default:assignment.trainer.username }}</h6>
+                        <p class="text-muted mb-0">
+                            <strong>Course:</strong> {{ assignment.course.title }}<br>
+                            <strong>Assigned By:</strong> {{ assignment.assigned_by.get_full_name|default:assignment.assigned_by.username }}<br>
+                            <strong>Assigned Date:</strong> {{ assignment.assigned_at|date:"M d, Y" }}
+                        </p>
+                    </div>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-x-circle"></i> Yes, Unassign Trainer
+                        </button>
+                        <a href="{% url 'manager_assign_trainer' %}" class="btn btn-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

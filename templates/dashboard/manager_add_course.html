@@ -1,0 +1,103 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Add Course{% endblock %}
+
+{% block page_title %}Add New Course{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'manager_dashboard' %}">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Create New Course</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Course Title *</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description *</label>
+                        <textarea name="description" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Instructor</label>
+                            <select name="instructor" class="form-select">
+                                <option value="">Select Instructor</option>
+                                {% for instructor in instructors %}
+                                <option value="{{ instructor.id }}">{{ instructor.get_full_name|default:instructor.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Category</label>
+                            <input type="text" name="category" class="form-control" placeholder="e.g., Web Development">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Level</label>
+                            <select name="level" class="form-select">
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Duration</label>
+                            <input type="text" name="duration" class="form-control" placeholder="e.g., 10 Hours">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Price ($)</label>
+                            <input type="number" name="price" class="form-control" step="0.01" value="0">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Discount (%)</label>
+                            <input type="number" name="discount" class="form-control" step="0.01" value="0" min="0" max="100">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Thumbnail</label>
+                            <input type="file" name="thumbnail" class="form-control" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Featured Video</label>
+                        <input type="file" name="featured_video" class="form-control" accept="video/*">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Requirements (comma-separated)</label>
+                        <textarea name="requirements" class="form-control" rows="2" placeholder="Requirement 1, Requirement 2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Content (comma-separated)</label>
+                        <textarea name="content" class="form-control" rows="2" placeholder="Content 1, Content 2"></textarea>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Create Course
+                        </button>
+                        <a href="{% url 'manager_dashboard' %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

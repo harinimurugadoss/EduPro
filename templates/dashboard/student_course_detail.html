@@ -1,0 +1,130 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block page_title %}{{ course.title }}{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'student_dashboard' %}">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="{% url 'student_course_detail' course.id %}">
+            <i class="bi bi-book"></i> Course Content
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4>{{ course.title }}</h4>
+                        <p class="text-muted">Instructor: {{ course.instructor.get_full_name|default:course.instructor.username }}</p>
+                    </div>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{% url 'trainer_contact' course.instructor.id %}" class="btn btn-outline-primary">
+                            <i class="bi bi-person-lines-fill"></i> Contact Trainer
+                        </a>
+                        <a href="{% url 'rate_trainer' course.instructor.id %}" class="btn btn-outline-warning">
+                            <i class="bi bi-star"></i> Rate Trainer
+                        </a>
+                        <a href="{% url 'submit_feedback' course.id %}" class="btn btn-outline-info">
+                            <i class="bi bi-chat-left-text"></i> Submit Feedback
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Overall Progress -->
+                <div class="mt-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span><strong>Course Progress</strong></span>
+                        <span><strong>{{ overall_progress|floatformat:0 }}%</strong></span>
+                    </div>
+                    <div class="progress" style="height: 25px;">
+                        <div class="progress-bar {% if overall_progress == 100 %}bg-success{% elif overall_progress >= 50 %}bg-info{% else %}bg-warning{% endif %}" 
+                             role="progressbar" 
+                             style="width: {{ overall_progress }}%"
+                             aria-valuenow="{{ overall_progress }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                            {{ overall_progress|floatformat:0 }}%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-play-circle"></i> Course Videos</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% for item in video_progress_list %}
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">
+                                    <i class="bi bi-play-circle-fill text-primary"></i> {{ item.video.title }}
+                                </h6>
+                                <div class="progress mb-2" style="height: 8px;">
+                                    <div class="progress-bar" 
+                                         role="progressbar" 
+                                         style="width: {{ item.progress.progress_percentage }}%"
+                                         aria-valuenow="{{ item.progress.progress_percentage }}" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100">
+                                    </div>
+                                </div>
+                                <small class="text-muted">
+                                    Progress: {{ item.progress.progress_percentage }}% 
+                                    {% if item.progress.completed %}
+                                    <span class="badge bg-success">Completed</span>
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <div class="ms-3">
+                                <a href="{{ item.video.video.url }}" class="btn btn-sm btn-primary" target="_blank">
+                                    <i class="bi bi-play"></i> Watch
+                                </a>
+                                <a href="{% url 'rate_video' item.video.id %}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-star"></i> Rate
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="alert alert-info">
+                        No videos available for this course yet.
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+// Update progress when video is watched (simplified - you can enhance this)
+$('a[href*=".mp4"], a[href*=".webm"]').on('click', function() {
+    // This would typically be handled by a video player with progress tracking
+    // For now, it's a placeholder
+});
+</script>
+{% endblock %}
+{% endblock %}
+

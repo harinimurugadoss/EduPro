@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} - Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+
+<body>
+
+<div class="dashboard-wrapper">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-user">
+            <h2>{{ user.username }}</h2>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li><a href="/dashboard/home">🏠 Dashboard</a></li>
+
+            <li><a href="/dashboard/courses-enrolled">📘 Courses Enrolled</a></li>
+
+            {% if not profile.is_student %}
+            <li><a href="/dashboard/courses-uploaded">📚 Your Courses</a></li>
+            <li><a href="/dashboard/upload">⬆ Upload Course</a></li>
+            {% endif %}
+
+            <li><a href="/dashboard/profile">👤 Account</a></li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</div>
+
+</body>
+</html>

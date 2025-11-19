@@ -1,0 +1,68 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}Submit Feedback{% endblock %}
+
+{% block page_title %}Submit Feedback for {{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-chat-left-text"></i> Course Feedback</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Rating *</label>
+                        <div class="rating-input">
+                            {% for i in "12345" %}
+                            <input type="radio" name="rating" value="{{ i }}" id="star{{ i }}" 
+                                   {% if existing_feedback and existing_feedback.rating == i|add:"0" %}checked{% endif %} required>
+                            <label for="star{{ i }}" class="star-label">
+                                <i class="bi bi-star{% if existing_feedback and existing_feedback.rating >= i|add:"0" %}-fill{% endif %}"></i>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Comment *</label>
+                        <textarea name="comment" class="form-control" rows="5" required placeholder="Share your experience with this course...">{{ existing_feedback.comment|default:"" }}</textarea>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Submit Feedback
+                        </button>
+                        <a href="{% url 'student_course_detail' course.id %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.rating-input {
+    display: flex;
+    gap: 5px;
+    font-size: 2rem;
+    direction: rtl;
+}
+.rating-input input[type="radio"] {
+    display: none;
+}
+.rating-input .star-label {
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.2s;
+}
+.rating-input input[type="radio"]:checked ~ .star-label,
+.rating-input .star-label:hover,
+.rating-input input[type="radio"]:checked ~ .star-label ~ .star-label {
+    color: #ffc107;
+}
+</style>
+{% endblock %}
+

@@ -1,0 +1,75 @@
+{% extends 'dashboard/dashboard_base_modern.html' %}
+{% load static %}
+
+{% block title %}View Feedback{% endblock %}
+
+{% block page_title %}Student Feedback{% endblock %}
+
+{% block sidebar_menu %}
+<ul class="nav flex-column">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'manager_dashboard' %}">
+            <i class="bi bi-house-door"></i> Dashboard
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5>Average Rating: <span class="badge bg-warning text-dark">{{ avg_rating }} / 5.0</span></h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-chat-left-text"></i> All Feedback</h5>
+            </div>
+            <div class="card-body">
+                {% if feedbacks %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Course</th>
+                                <th>Rating</th>
+                                <th>Comment</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for feedback in feedbacks %}
+                            <tr>
+                                <td>{{ feedback.student.get_full_name|default:feedback.student.username }}</td>
+                                <td>{{ feedback.course.title }}</td>
+                                <td>
+                                    {% for i in "12345" %}
+                                    <i class="bi bi-star{% if feedback.rating >= i|add:"0" %}-fill{% endif %} text-warning"></i>
+                                    {% endfor %}
+                                </td>
+                                <td>{{ feedback.comment|truncatewords:20 }}</td>
+                                <td>{{ feedback.created_at|date:"M d, Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> No feedback available yet.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
